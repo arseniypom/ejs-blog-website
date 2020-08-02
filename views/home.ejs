@@ -1,0 +1,21 @@
+<%- include('partials/header'); -%>
+
+<% let truncateString = (str, num) => {%>
+<% if (str.length <= num) {%>
+<%   return str%>
+<% } else {%>
+<%   return str.slice(0, num) + '...'%>
+<% }%>
+<% } %>
+
+<h1>Home</h1>
+<p><%= startingContent %></p>
+<% existingPosts.forEach(post => {%>
+<h1><%= post.title %></h1>
+<p>
+  <%= truncateString(post.body, 100) %>
+  <a href='/posts/<%=post.title %>'>Read More</a>
+</p>
+<%}) %>
+
+<%- include('partials/footer'); -%>
