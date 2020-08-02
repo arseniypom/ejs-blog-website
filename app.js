@@ -51,8 +51,8 @@ app.get('/contact', function(req, res) {
   })
 })
 
-app.get('/compose', function(req, res) {
-  res.render('compose', {
+app.get('/write', function(req, res) {
+  res.render('write', {
   })
 })
 
@@ -71,7 +71,7 @@ app.get('/posts/:postName', function(req, res) {
 })
 
 
-app.post('/compose', function(req, res) {
+app.post('/write', function(req, res) {
   const post = {
     title: req.body.postTitle,
     body: req.body.postBody
@@ -80,12 +80,6 @@ app.post('/compose', function(req, res) {
   posts.push(post);
   res.redirect('/');
 })
-
-
-
-
-
-
 
 
 
