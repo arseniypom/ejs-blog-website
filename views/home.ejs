@@ -11,10 +11,10 @@
 <h1>Home</h1>
 <p><%= startingContent %></p>
 <% existingPosts.forEach(post => {%>
-<h1><%= post.title %></h1>
+<h1><%= post.postTitle %></h1>
 <p>
-  <%= truncateString(post.body, 100) %>
-  <a href='/posts/<%=post.title %>'>Read More</a>
+  <%= truncateString(post.postBody, 100) %>
+  <a href='/posts/<%=post._id %>'>Open</a>
 </p>
 <%}) %>
 
