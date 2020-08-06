@@ -47,12 +47,8 @@ app.get('/', function(req, res) {
       console.log(err);
     } else {
       if (foundPosts.length === 0) {
-        new Promise((resolve, reject) => {
-          post1.save();
-          resolve();
-        }).then(() => {
-          res.redirect('/');
-        })
+        post1.save();
+        res.redirect('/');
       } else {
         res.render('home', {
           startingContent: homeStartingContent,
@@ -84,8 +80,7 @@ app.get('/posts/:postId', function(req, res) {
   const requestedPostId = req.params.postId;
   Post.findById(requestedPostId, function (err, post) {
     res.render('post', {
-      title: post.postTitle,
-      content: post.postBody
+      chosenPost: post
     })
   })
 })
@@ -101,11 +96,27 @@ app.post('/write', function(req, res) {
   res.redirect('/');
 })
 
-// app.post('/delete', function(req, res) {
-//   const deletedPostId = req.params.postId;
-//   console.log(deletedPostId);
-// })
+app.post('/gohome', function(req, res) {
+  res.redirect('/');
+})
 
+app.post('/delete', function(req, res) {
+  let postToDeleteId = req.body.postId;
+  async function f(Id) {
+    let promise = new Promise((resolve, reject) => {
+      Post.deleteOne({_id: Id}, function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+          resolve();
+        }
+      })
+    })
+    let result = await promise;
+    res.render('deleted-success', {});
+  }
+  f(postToDeleteId);
+})
 
 
 let port = process.env.PORT;
