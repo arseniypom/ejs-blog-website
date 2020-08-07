@@ -53,12 +53,11 @@ app.get('/', function(req, res) {
       console.log(err);
     } else {
       if (foundPosts.length === 0) {
-        Post.insertMany(defaultItems, function(err) {
-          if (err) {
-            console.log(err);
-          }
-        })
-        res.redirect('/');
+        Post.insertMany(defaultItems,function(err){
+         if (!err){
+           res.redirect('/');
+         }
+       })
       } else {
         res.render('home', {
           startingContent: homeStartingContent,
@@ -103,7 +102,11 @@ app.post('/write', function(req, res) {
     postTitle: req.body.postTitle,
     postBody: req.body.postBody
   })
-  newPost.save();
+  newPost.save(function(err){
+   if (!err){
+     res.redirect('/');
+   }
+ });
   res.redirect('/');
 })
 
