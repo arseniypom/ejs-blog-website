@@ -34,9 +34,15 @@ const postsSchema = new mongoose.Schema({
 
 const Post = mongoose.model('Post', postsSchema);
 const post1 = new Post({
-  postTitle: 'Example post',
+  postTitle: 'Day 1',
   postBody: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Scelerisque purus semper eget duis at tellus. Duis ut diam quam nulla porttitor massa id. Orci nulla pellentesque dignissim enim sit. Id consectetur purus ut faucibus pulvinar elementum integer enim neque. Amet risus nullam eget felis eget nunc lobortis. Lobortis mattis aliquam faucibus purus in massa tempor nec. Nibh ipsum consequat nisl vel pretium lectus quam id. Augue mauris augue neque gravida in. Porttitor lacus luctus accumsan tortor posuere ac ut consequat semper. Sit amet tellus cras adipiscing enim. Et molestie ac feugiat sed lectus vestibulum mattis ullamcorper.'
 })
+const post2 = new Post({
+  postTitle: 'Day 2',
+  postBody: 'Gravida neque convallis a cras semper auctor neque. Curabitur gravida arcu ac tortor dignissim convallis aenean. Et leo duis ut diam. Dapibus ultrices in iaculis nunc. Cras semper auctor neque vitae tempus. Et tortor consequat id porta. Nulla facilisi etiam dignissim diam quis. Ac turpis egestas sed tempus. Dolor magna eget est lorem ipsum dolor sit. Tempus iaculis urna id volutpat lacus laoreet. Nunc sed id semper risus in hendrerit gravida rutrum quisque. Pellentesque sit amet porttitor eget dolor morbi non. A pellentesque sit amet porttitor eget. Sed augue lacus viverra vitae. Mauris pharetra et ultrices neque ornare aenean euismod elementum nisi. Aliquam etiam erat velit scelerisque.Vulputate mi sit amet mauris commodo quis imperdiet massa. Tempus urna et pharetra pharetra massa massa ultricies. Non quam lacus suspendisse faucibus interdum posuere lorem ipsum. Eget magna fermentum iaculis eu non diam phasellus. Metus vulputate eu scelerisque felis. Pretium nibh ipsum consequat nisl vel pretium lectus. Eget felis eget nunc lobortis mattis aliquam faucibus. Posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper. Cras adipiscing enim eu turpis. Velit ut tortor pretium viverra suspendisse. A cras semper auctor neque vitae tempus quam pellentesque. Nulla pellentesque dignissim enim sit amet venenatis urna cursus eget.'
+})
+
+const defaultItems = [post1, post2];
 
 
 // GET requests
@@ -47,7 +53,13 @@ app.get('/', function(req, res) {
       console.log(err);
     } else {
       if (foundPosts.length === 0) {
-        post1.save();
+        Post.insertMany(defaultItems, function(err) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log("Inserted successfully!");
+          }
+        })
         res.redirect('/');
       } else {
         res.render('home', {
@@ -55,6 +67,7 @@ app.get('/', function(req, res) {
           existingPosts: foundPosts
         })
       }
+
     }
   })
 })
@@ -78,7 +91,7 @@ app.get('/write', function(req, res) {
 
 app.get('/posts/:postId', function(req, res) {
   const requestedPostId = req.params.postId;
-  Post.findById(requestedPostId, function (err, post) {
+  Post.findById(requestedPostId, function(err, post) {
     res.render('post', {
       chosenPost: post
     })
@@ -96,27 +109,29 @@ app.post('/write', function(req, res) {
   res.redirect('/');
 })
 
-app.post('/gohome', function(req, res) {
-  res.redirect('/');
-})
+// app.post('/gohome', function(req, res) {
+//   res.redirect('/');
+// })
 
-app.post('/delete', function(req, res) {
-  let postToDeleteId = req.body.postId;
-  async function f(Id) {
-    let promise = new Promise((resolve, reject) => {
-      Post.deleteOne({_id: Id}, function (err) {
-        if (err) {
-          console.log(err);
-        } else {
-          resolve();
-        }
-      })
-    })
-    let result = await promise;
-    res.render('deleted-success', {});
-  }
-  f(postToDeleteId);
-})
+// app.post('/delete', function(req, res) {
+//   let postToDeleteId = req.body.postId;
+//   const deleteFunc = async () => {
+//     try {
+//       await Post.deleteOne({
+//         _id: postToDeleteId
+//       }, function(err) {
+//         if (err) {
+//           console.log(err);
+//         }
+//       })
+//       res.render('deleted-success', {});
+//       resolve();
+//     } catch (err) {
+//       console.log(err)
+//     }
+//   }
+//   deleteFunc();
+// })
 
 
 let port = process.env.PORT;
