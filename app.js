@@ -56,8 +56,6 @@ app.get('/', function(req, res) {
         Post.insertMany(defaultItems, function(err) {
           if (err) {
             console.log(err);
-          } else {
-            console.log("Inserted successfully!");
           }
         })
         res.redirect('/');
@@ -109,29 +107,21 @@ app.post('/write', function(req, res) {
   res.redirect('/');
 })
 
-// app.post('/gohome', function(req, res) {
-//   res.redirect('/');
-// })
+app.post('/gohome', function(req, res) {
+  res.redirect('/');
+})
 
-// app.post('/delete', function(req, res) {
-//   let postToDeleteId = req.body.postId;
-//   const deleteFunc = async () => {
-//     try {
-//       await Post.deleteOne({
-//         _id: postToDeleteId
-//       }, function(err) {
-//         if (err) {
-//           console.log(err);
-//         }
-//       })
-//       res.render('deleted-success', {});
-//       resolve();
-//     } catch (err) {
-//       console.log(err)
-//     }
-//   }
-//   deleteFunc();
-// })
+app.post('/delete', function(req, res) {
+  let postToDeleteId = req.body.postId;
+  Post.deleteOne({
+    _id: postToDeleteId
+  }, function(err) {
+    if (err) {
+      console.log(err);
+    }
+  })
+  res.render('deleted-success', {});
+})
 
 
 let port = process.env.PORT;
