@@ -21,7 +21,8 @@ app.use(express.static('public'));
 
 //Mongoose setup
 mongoose.Promise = global.Promise;
-mongoose.connect(`mongodb+srv://admin-arseniy:${process.env.PASSWORD}@cluster0.kwkdp.mongodb.net/blogDB?retryWrites=true&w=majority`, {
+const password = process.env.PASSWORD;
+mongoose.connect(`mongodb+srv://admin-arseniy:${password}@cluster0.kwkdp.mongodb.net/blogDB?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
